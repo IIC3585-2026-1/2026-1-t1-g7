@@ -1,0 +1,44 @@
+<head>
+  <style>
+    .ball {
+      margin-left: 100px;
+      width: 50px;
+      height: 50px;
+      background-color: #00bfff;
+      border-radius: 50%;
+      /* Makes it a circle */
+      position: relative;
+      animation: bounce 1s infinite;
+      /* Applies the 'bounce' animation */
+    }
+
+    hr {
+      top: 460px;
+      position: relative;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0);
+        /* Start and end position (on the ground) */
+      }
+
+      50% {
+        transform: translateY(400px);
+        /* Midpoint (at the peak of the bounce) */
+      }
+
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <h1>Bouncing Ball Animation</h1>
+  <hr>
+
+  <div class="ball"></div>
+</body>

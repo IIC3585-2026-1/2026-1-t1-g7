@@ -1,0 +1,87 @@
+<html>
+
+<head>
+    <style>
+        .dashboard {
+            display: flex;
+            height: 100vh;
+            /* Ocupa toda la altura de la pantalla */
+        }
+
+        .sidebar {
+            flex: 0 0 200px;
+            /* No crece, no se encoge, siempre mide 200px */
+            background-color: #1a1a2e;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            /* Ocupa TODO el espacio restante */
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            /* Título a la izquierda, perfil a la derecha */
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .stats-grid {
+            display: flex;
+            flex-wrap: wrap;
+            /* Si no caben las 3 tarjetas, se bajan solas */
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .stat-card {
+            flex: 1 1 200px;
+            /* Cada tarjeta intenta medir 200px pero se estira para llenar el hueco */
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="logo">MiApp</div>
+            <nav>
+                <ul>
+                    <li>Inicio</li>
+                    <li>Reportes</li>
+                    <li>Ajustes</li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h2>Panel de Control</h2>
+                <div class="user-profile">JS</div>
+            </header>
+
+            <section class="stats-grid">
+                <div class="stat-card">Ventas: $12k</div>
+                <div class="stat-card">Visitas: 50k</div>
+                <div class="stat-card">Conversión: 3%</div>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

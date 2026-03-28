@@ -1,0 +1,48 @@
+<head>
+    <style>
+        .contenedor-grid {
+            display: grid;
+            /* Creamos 3 columnas de igual tamaño (1 fracción cada una) */
+            grid-template-columns: repeat(3, 1fr);
+
+            /* Espacio entre celdas */
+            gap: 20px;
+
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .item {
+            background-color: #3498db;
+            color: white;
+            padding: 40px;
+            text-align: center;
+            font-size: 24px;
+            border-radius: 8px;
+            border: 2px solid #2980b9;
+        }
+
+        .item1 {
+            grid-column-start: 1;
+            grid-column-end: 3;
+        }
+
+        .item5 {
+            grid-column-start: 1;
+            grid-column-end: 3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Ejemplo de Grid Layout</h1>
+    <p>Este es un ejemplo básico de un contenedor con 3 columnas utilizando CSS Grid.</p>
+</body>
+<div class="contenedor-grid">
+    <div class="item item1">1</div>
+    <div class="item item2">2</div>
+    <div class="item item3">3</div>
+    <div class="item item4">4</div>
+    <div class="item item5">5</div>
+    <div class="item item6">6</div>
+</div>

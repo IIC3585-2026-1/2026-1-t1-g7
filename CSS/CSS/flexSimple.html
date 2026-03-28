@@ -1,0 +1,42 @@
+<html>
+
+<head>
+    <style>
+        .container {
+            display: flex;
+            /* Activa el modo Flexbox */
+            justify-content: center;
+            /* Centra los hijos horizontalmente */
+            align-items: center;
+            /* Centra los hijos verticalmente */
+            gap: 20px;
+            /* Crea espacio entre los cuadros */
+            height: 200px;
+            /* Altura para notar el centrado vertical */
+            background-color: #f0f0f0;
+        }
+
+        .box {
+            width: 50px;
+            height: 50px;
+            background-color: #007bff;
+            color: white;
+            display: flex;
+            /* También podemos usar flex dentro de los hijos */
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Ejemplo de Flexbox</h1>
+    <p>Este es un ejemplo básico de un contenedor con 3 cuadros utilizando CSS Flexbox.</p>
+    <div class="container">
+        <div class="box">1</div>
+        <div class="box">2</div>
+        <div class="box">3</div>
+    </div>
+</body>
+
+</html>

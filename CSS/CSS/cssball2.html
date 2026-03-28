@@ -1,0 +1,42 @@
+<head>
+    <style>
+        /* Estilo del objeto */
+        .pelota {
+            width: 100px;
+            height: 100px;
+            background-color: #3498db;
+            border-radius: 50%;
+            margin-left: 100px;
+
+            /* Aplicamos la animación */
+            animation-name: rebote;
+            /* Nombre del keyframe */
+            animation-duration: 1s;
+            /* Duración del ciclo */
+            animation-iteration-count: infinite;
+            /* 3 veces ida y vuelta */
+            animation-direction: alternate;
+            /* Va y viene */
+            animation-timing-function: ease-in-out;
+            /* Movimiento fluido */
+        }
+
+        /* Definición de los pasos */
+        @keyframes rebote {
+            from {
+                transform: translateY(0px);
+                background-color: #3498db;
+            }
+
+            to {
+                transform: translateY(250px);
+                background-color: #e74c3c;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Animación de Pelota Rebotando</h1>
+    <div class="pelota"></div>
+</body>

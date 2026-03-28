@@ -1,0 +1,44 @@
+<head>
+  <style>
+    img {
+      --g: 15px;
+      /* control the gap */
+
+      width: 280px;
+      aspect-ratio: 1;
+      box-sizing: border-box;
+      --_g: var(--g)/calc(50% - var(--g)) calc(50% - var(--g)) no-repeat conic-gradient(#000 0 0);
+      mask:
+        left var(--_i, ) top var(--_g),
+        bottom var(--_i, ) left var(--_g),
+        top var(--_i, ) right var(--_g),
+        right var(--_i, ) bottom var(--_g);
+      filter: grayscale();
+      transition: .3s linear;
+      cursor: pointer;
+    }
+
+    img:hover {
+      --_i: var(--g);
+      filter: grayscale(0);
+      padding: var(--g);
+    }
+
+    body {
+      margin: 0;
+      display: grid;
+      min-height: 100vh;
+      grid-auto-flow: column;
+      place-content: center;
+      gap: 40px;
+      background: #d1c1a7;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <img src="https://picsum.photos/id/211/300/300">
+  <img src="https://picsum.photos/id/82/300/300" style="--g: 20px">
+</body>

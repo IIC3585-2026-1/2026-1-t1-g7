@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS Transformations</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --panel: #111;
+    --border: #222;
+    --accent: #e8ff47;
+    --text: #f0f0f0;
+    --muted: #555;
+    --transition: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 10vw, 120px);
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: var(--panel);
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.9s ease;
+  }
+  .card:hover::before { transform: scaleX(1); }
+
+  .card-label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    align-self: flex-start;
+  }
+
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    align-self: flex-start;
+    margin-top: -20px;
+  }
+
+  /* The shape */
+  .shape {
+    width: 80px;
+    height: 80px;
+    background: var(--accent);
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  /* Controls */
+  .controls {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .slider-row label { width: 80px; flex-shrink: 0; }
+
+  .slider-row .val {
+    width: 55px;
+    text-align: right;
+    color: var(--text);
+    flex-shrink: 0;
+  }
+
+  input[type=range] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 2px;
+    background: var(--border);
+    outline: none;
+    border-radius: 0;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--accent);
+    cursor: pointer;
+    border-radius: 0;
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: var(--accent);
+    border: none;
+    cursor: pointer;
+    border-radius: 0;
+  }
+
+  .btn-reset {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    align-self: flex-end;
+  }
+  .btn-reset:hover { border-color: var(--accent); color: var(--accent); }
+
+  .preview-area {
+    width: 100%;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0d0d0d;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+
+  /* Cross-hair guides */
+  .preview-area::before,
+  .preview-area::after {
+    content: '';
+    position: absolute;
+    background: var(--border);
+    pointer-events: none;
+  }
+  .preview-area::before { width: 1px; height: 100%; left: 50%; }
+  .preview-area::after  { height: 1px; width: 100%; top: 50%; }
+
+  /* --- CARD-SPECIFIC SHAPES --- */
+
+  /* 1. Rotate */
+  #card-rotate .shape { border-radius: 0; }
+
+  /* 2. Scale */
+  #card-scale .shape { border-radius: 50%; }
+
+  /* 3. Translate */
+  #card-translate .shape { width: 50px; height: 50px; clip-path: polygon(50% 0%,100% 100%,0% 100%); }
+
+  /* 4. Skew */
+  #card-skew .shape { width: 90px; height: 55px; border-radius: 4px; }
+
+  /* 5. Perspective */
+  #card-perspective .shape { width: 90px; height: 90px; border-radius: 6px; background: linear-gradient(135deg, var(--accent), #a8d400); }
+
+  /* 6. Combined */
+  #card-combo .shape { border-radius: 12px; background: linear-gradient(135deg, var(--accent), #ff6b6b); }
+
+  footer {
+    text-align: center;
+    margin-top: 60px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Transform</h1>
+  <p>CSS Transformations — Interactive Demo</p>
+</header>
+
+<div class="grid">
+
+  <!-- ROTATE -->
+  <div class="card" id="card-rotate">
+    <span class="card-label">01 — Rotate</span>
+    <div class="card-title">ROTATE</div>
+    <div class="preview-area">
+      <div class="shape" id="s-rotate"></div>
+    </div>
+    <div class="controls">
+      <div class="slider-row">
+        <label>angle</label>
+        <input type="range" id="r-rotate" min="0" max="360" value="0">
+        <span class="val" id="v-rotate">0°</span>
+      </div>
+    </div>
+    <button class="btn-reset" onclick="reset('rotate')">Reset</button>
+  </div>
+
+  <!-- SCALE -->
+  <div class="card" id="card-scale">
+    <span class="card-label">02 — Scale</span>
+    <div class="card-title">SCALE</div>
+    <div class="preview-area">
+      <div class="shape" id="s-scale"></div>
+    </div>
+    <div class="controls">
+      <div class="slider-row">
+        <label>scale X</label>
+        <input type="range" id="r-scaleX" min="0.1" max="3" step="0.05" value="1">
+        <span class="val" id="v-scaleX">1.0×</span>
+      </div>
+      <div class="slider-row">
+        <label>scale Y</label>
+        <input type="range" id="r-scaleY" min="0.1" max="3" step="0.05" value="1">
+        <span class="val" id="v-scaleY">1.0×</span>
+      </div>
+    </div>
+    <button class="btn-reset" onclick="reset('scale')">Reset</button>
+  </div>
+
+  <!-- TRANSLATE -->
+  <div class="card" id="card-translate">
+    <span class="card-label">03 — Translate</span>
+    <div class="card-title">TRANSLATE</div>
+    <div class="preview-area">
+      <div class="shape" id="s-translate"></div>
+    </div>
+    <div class="controls">
+      <div class="slider-row">
+        <label>X offset</label>
+        <input type="range" id="r-tx" min="-60" max="60" value="0">
+        <span class="val" id="v-tx">0px</span>
+      </div>
+      <div class="slider-row">
+        <label>Y offset</label>
+        <input type="range" id="r-ty" min="-50" max="50" value="0">
+        <span class="val" id="v-ty">0px</span>
+      </div>
+    </div>
+    <button class="btn-reset" onclick="reset('translate')">Reset</button>
+  </div>
+
+  <!-- SKEW -->
+  <div class="card" id="card-skew">
+    <span class="card-label">04 — Skew</span>
+    <div class="card-title">SKEW</div>
+    <div class="preview-area">
+      <div class="shape" id="s-skew"></div>
+    </div>
+    <div class="controls">
+      <div class="slider-row">
+        <label>skew X</label>
+        <input type="range" id="r-skewX" min="-45" max="45" value="0">
+        <span class="val" id="v-skewX">0°</span>
+      </div>
+      <div class="slider-row">
+        <label>skew Y</label>
+        <input type="range" id="r-skewY" min="-45" max="45" value="0">
+        <span class="val" id="v-skewY">0°</span>
+      </div>
+    </div>
+    <button class="btn-reset" onclick="reset('skew')">Reset</button>
+  </div>
+
+  <!-- PERSPECTIVE (3D rotateX / rotateY) -->
+  <div class="card" id="card-perspective">
+    <span class="card-label">05 — Perspective</span>
+    <div class="card-title">3D ROTATE</div>
+    <div class="preview-area" style="perspective: 400px;">
+      <div class="shape" id="s-perspective"></div>
+    </div>
+    <div class="controls">
+      <div class="slider-row">
+        <label>rotate X</label>
+        <input type="range" id="r-rx" min="-180" max="180" value="0">
+        <span class="val" id="v-rx">0°</span>
+      </div>
+      <div class="slider-row">
+        <label>rotate Y</label>
+        <input type="range" id="r-ry" min="-180" max="180" value="0">
+        <span class="val" id="v-ry">0°</span>
+      </div>
+    </div>
+    <button class="btn-reset" onclick="reset('perspective')">Reset</button>
+  </div>
+
+  <!-- COMBINED -->
+  <div class="card" id="card-combo">
+    <span class="card-label">06 — Combined</span>
+    <div class="card-title">COMBINED</div>
+    <div class="preview-area" style="perspective: 400px;">
+      <div class="shape" id="s-combo"></div>
+    </div>
+    <div class="controls">
+      <div class="slider-row">
+        <label>rotate</label>
+        <input type="range" id="r-cr" min="0" max="360" value="0">
+        <span class="val" id="v-cr">0°</span>
+      </div>
+      <div class="slider-row">
+        <label>scale</label>
+        <input type="range" id="r-cs" min="0.2" max="2.5" step="0.05" value="1">
+        <span class="val" id="v-cs">1.0×</span>
+      </div>
+      <div class="slider-row">
+        <label>skew X</label>
+        <input type="range" id="r-csk" min="-40" max="40" value="0">
+        <span class="val" id="v-csk">0°</span>
+      </div>
+    </div>
+    <button class="btn-reset" onclick="reset('combo')">Reset</button>
+  </div>
+
+</div>
+
+<footer>Drag the sliders to apply CSS transforms in real time</footer>
+
+<script>
+  const DEFAULTS = {
+    rotate:     { 'r-rotate': 0 },
+    scale:      { 'r-scaleX': 1, 'r-scaleY': 1 },
+    translate:  { 'r-tx': 0, 'r-ty': 0 },
+    skew:       { 'r-skewX': 0, 'r-skewY': 0 },
+    perspective:{ 'r-rx': 0, 'r-ry': 0 },
+    combo:      { 'r-cr': 0, 'r-cs': 1, 'r-csk': 0 }
+  };
+
+  function applyRotate() {
+    const a = +document.getElementById('r-rotate').value;
+    document.getElementById('v-rotate').textContent = a + '°';
+    document.getElementById('s-rotate').style.transform = `rotate(${a}deg)`;
+  }
+
+  function applyScale() {
+    const sx = +document.getElementById('r-scaleX').value;
+    const sy = +document.getElementById('r-scaleY').value;
+    document.getElementById('v-scaleX').textContent = sx.toFixed(2) + '×';
+    document.getElementById('v-scaleY').textContent = sy.toFixed(2) + '×';
+    document.getElementById('s-scale').style.transform = `scale(${sx}, ${sy})`;
+  }
+
+  function applyTranslate() {
+    const tx = +document.getElementById('r-tx').value;
+    const ty = +document.getElementById('r-ty').value;
+    document.getElementById('v-tx').textContent = tx + 'px';
+    document.getElementById('v-ty').textContent = ty + 'px';
+    document.getElementById('s-translate').style.transform = `translate(${tx}px, ${ty}px)`;
+  }
+
+  function applySkew() {
+    const sx = +document.getElementById('r-skewX').value;
+    const sy = +document.getElementById('r-skewY').value;
+    document.getElementById('v-skewX').textContent = sx + '°';
+    document.getElementById('v-skewY').textContent = sy + '°';
+    document.getElementById('s-skew').style.transform = `skew(${sx}deg, ${sy}deg)`;
+  }
+
+  function applyPerspective() {
+    const rx = +document.getElementById('r-rx').value;
+    const ry = +document.getElementById('r-ry').value;
+    document.getElementById('v-rx').textContent = rx + '°';
+    document.getElementById('v-ry').textContent = ry + '°';
+    document.getElementById('s-perspective').style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+  }
+
+  function applyCombo() {
+    const r  = +document.getElementById('r-cr').value;
+    const s  = +document.getElementById('r-cs').value;
+    const sk = +document.getElementById('r-csk').value;
+    document.getElementById('v-cr').textContent  = r + '°';
+    document.getElementById('v-cs').textContent  = s.toFixed(2) + '×';
+    document.getElementById('v-csk').textContent = sk + '°';
+    document.getElementById('s-combo').style.transform =
+      `rotate(${r}deg) scale(${s}) skewX(${sk}deg)`;
+  }
+
+  function reset(type) {
+    const defs = DEFAULTS[type];
+    for (const [id, val] of Object.entries(defs)) {
+      document.getElementById(id).value = val;
+    }
+    ({ rotate: applyRotate, scale: applyScale, translate: applyTranslate,
+       skew: applySkew, perspective: applyPerspective, combo: applyCombo })[type]();
+  }
+
+  // Wire up listeners
+  ['r-rotate'].forEach(id => document.getElementById(id).addEventListener('input', applyRotate));
+  ['r-scaleX','r-scaleY'].forEach(id => document.getElementById(id).addEventListener('input', applyScale));
+  ['r-tx','r-ty'].forEach(id => document.getElementById(id).addEventListener('input', applyTranslate));
+  ['r-skewX','r-skewY'].forEach(id => document.getElementById(id).addEventListener('input', applySkew));
+  ['r-rx','r-ry'].forEach(id => document.getElementById(id).addEventListener('input', applyPerspective));
+  ['r-cr','r-cs','r-csk'].forEach(id => document.getElementById(id).addEventListener('input', applyCombo));
+</script>
+</body>
+</html>

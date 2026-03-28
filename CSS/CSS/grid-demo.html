@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Grid Demo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: sans-serif;
+      background: #f0f2f5;
+      color: #333;
+      padding: 32px;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+      font-size: 1.6rem;
+    }
+
+    p.subtitle {
+      color: #666;
+      margin-bottom: 32px;
+    }
+
+    h2 {
+      margin: 32px 0 12px;
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    .box {
+      background: #4f46e5;
+      color: white;
+      padding: 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 60px;
+    }
+
+    .box:nth-child(2n) {
+      background: #7c3aed;
+    }
+
+    .box:nth-child(3n) {
+      background: #0891b2;
+    }
+
+    .box:nth-child(5n) {
+      background: #059669;
+    }
+
+    /* ── 1. Basic 3-column grid ── */
+    .grid-basic {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    /* ── 2. Auto-fill responsive ── */
+    .grid-auto {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+    }
+
+    /* ── 3. Spanning cells ── */
+    .grid-span {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(3, 80px);
+      gap: 12px;
+    }
+
+    .span-col2 {
+      grid-column: span 2;
+    }
+
+    .span-row2 {
+      grid-row: span 2;
+    }
+
+    .span-all {
+      grid-column: span 4;
+    }
+
+    /* ── 4. Named areas (Holy Grail layout) ── */
+    .grid-areas {
+      display: grid;
+      grid-template-areas:
+        "header header header"
+        "nav    main   aside"
+        "footer footer footer";
+      grid-template-columns: 140px 1fr 120px;
+      grid-template-rows: auto 140px auto;
+      gap: 12px;
+    }
+
+    .area-header {
+      grid-area: header;
+    }
+
+    .area-nav {
+      grid-area: nav;
+    }
+
+    .area-main {
+      grid-area: main;
+    }
+
+    .area-aside {
+      grid-area: aside;
+    }
+
+    .area-footer {
+      grid-area: footer;
+    }
+
+    /* ── 5. Alignment ── */
+    .grid-align {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .grid-align .box {
+      min-height: 90px;
+    }
+
+    .align-start {
+      align-self: start;
+    }
+
+    .align-center {
+      align-self: center;
+    }
+
+    .align-end {
+      align-self: end;
+    }
+
+    section {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>CSS Grid Demo</h1>
+  <p class="subtitle">Five common grid patterns — all with plain CSS.</p>
+
+  <!-- 1 -->
+  <h2>1 · Basic 3-column grid</h2>
+  <section class="grid-basic">
+    <div class="box">1</div>
+    <div class="box">2</div>
+    <div class="box">3</div>
+    <div class="box">4</div>
+    <div class="box">5</div>
+    <div class="box">6</div>
+  </section>
+
+  <!-- 2 -->
+  <h2>2 · Auto-fill responsive (resize the window)</h2>
+  <section class="grid-auto">
+    <div class="box">A</div>
+    <div class="box">B</div>
+    <div class="box">C</div>
+    <div class="box">D</div>
+    <div class="box">E</div>
+    <div class="box">F</div>
+    <div class="box">G</div>
+    <div class="box">H</div>
+  </section>
+
+  <!-- 3 -->
+  <h2>3 · Spanning cells</h2>
+  <section class="grid-span">
+    <div class="box span-col2">col-span 2</div>
+    <div class="box span-row2">row-span 2</div>
+    <div class="box">4</div>
+    <div class="box">5</div>
+    <div class="box">6</div>
+    <div class="box">7</div>
+    <div class="box span-all">col-span 4</div>
+  </section>
+
+  <!-- 4 -->
+  <h2>4 · Named template areas (Holy Grail)</h2>
+  <section class="grid-areas">
+    <div class="box area-header">header</div>
+    <div class="box area-nav">nav</div>
+    <div class="box area-main">main</div>
+    <div class="box area-aside">aside</div>
+    <div class="box area-footer">footer</div>
+  </section>
+
+  <!-- 5 -->
+  <h2>5 · Self-alignment within cells</h2>
+  <section class="grid-align">
+    <div class="box align-start">align-self: start</div>
+    <div class="box align-center">align-self: center</div>
+    <div class="box align-end">align-self: end</div>
+  </section>
+
+</body>
+
+</html>
