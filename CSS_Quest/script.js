@@ -447,7 +447,7 @@ const levelsInfo = [
     concept: "@media",
     intro: "¿Qué son y para qué?",
     introDetails: "Son reglas CSS condicionales. Permiten cambiar el diseño si se cumple una condición, usualmente el ancho de la pantalla (max-width o min-width).",
-    challenge: "Reduce el ancho simulado usando el slider. El Media Query indica que bajo 400px, las columnas del contenedor pasan de apiladas horizontal a vertical.",
+    challenge: "Reduce el ancho de la ventana. El Media Query indica que bajo 800px, las columnas del contenedor pasan de apiladas horizontal a vertical.",
     outro: "Hiciste tu primer paso en el diseño Responsive (adaptable).",
     outroDetails: [
       "Ejemplo 1: Ocultar barras laterales de PC cuando se ve en un celular.",
@@ -461,37 +461,26 @@ const levelsInfo = [
         <pre><code>@media (max-width: 400px) {
   .caja { flex-direction: column; }
 }</code></pre>
-        <div class="controls-panel">
-          <label>Ancho Dispositivo Simulado: <span id="mq-val">100</span>%</label>
-          <input type="range" id="mq-slider" min="30" max="100" value="100">
-        </div>
       </div>
       <div class="interactive-area animate-slide-up" style="animation-delay: 0.1s; display: flex; justify-content: center; width: 100%;">
         <!-- Contenedor simulador -->
         <div style="border: 4px solid var(--text-muted); border-radius: 20px; padding: 10px; height: 300px; width: 100%; max-width: 600px; display: flex; align-items:flex-end; justify-content:center;">
           <div id="mq-device" style="width: 100%; height: 260px; background: var(--surface-color); border: 1px solid rgba(0,0,0,0.1); border-radius: 10px; display: flex; gap: 10px; padding: 10px; transition: width 0.3s;">
-             <div class="box-demo" style="flex:1; height: 100%;">1</div>
-             <div class="box-demo" style="flex:1; height: 100%; background: var(--secondary);">2</div>
+             <div class="box-demo" style="flex:1; height: 100%; width: 100%;">1</div>
+             <div class="box-demo" style="flex:1; height: 100%; width: 100%; background: var(--secondary);">2</div>
           </div>
         </div>
       </div>
     `,
     setup: (wrapper, successCb) => {
-      const slider = wrapper.querySelector('#mq-slider');
-      const valDisp = wrapper.querySelector('#mq-val');
       const device = wrapper.querySelector('#mq-device');
-      
-      slider.addEventListener('input', (e) => {
-        const width = e.target.value;
-        valDisp.textContent = width;
-        device.style.width = width + '%';
-        
-        // Simular media query
-        if (width <= 45) {
-          device.style.flexDirection = 'column';
+      wrapper.style.gridTemplateColumns = "1fr";
+
+      const mq = window.matchMedia('(max-width: 800px)');
+
+      mq.addEventListener('change', (e) => {
+        if (e.matches) {
           successCb();
-        } else {
-          device.style.flexDirection = 'row';
         }
       });
     }
@@ -550,18 +539,11 @@ const levelsInfo = [
         const width = e.target.value;
         wrapper.querySelector('#cq-val').textContent = width;
         parent.style.width = width + '%';
-        
-        // Simular container query
+
         if (width <= 50) {
-          child.style.flexDirection = 'column';
-          child.style.textAlign = 'center';
-          sub.style.display = 'none';
           successCb();
-        } else {
-          child.style.flexDirection = 'row';
-          child.style.textAlign = 'left';
-          sub.style.display = 'block';
         }
+
       });
     }
   },
@@ -573,7 +555,7 @@ const levelsInfo = [
     concept: "transition",
     intro: "¿Qué es Transition?",
     introDetails: "Permite cambiar valores de propiedades CSS a lo largo del tiempo de manera fluida, en lugar de que ocurran instantáneamente.",
-    challenge: "Pasa el ratón (hover) sobre la caja morada para interactuar, pero verás que ahora será muy brusco. Presiona el botón para inyectarle una `transition` y vuelve a probar.",
+    challenge: "Pasa el ratón (hover) sobre la caja roja para interactuar, pero verás que ahora será muy brusco. Presiona el botón para inyectarle una `transition` y vuelve a probar.",
     outro: "¡Agregaste mantequilla (suavidad) a tu interfaz!",
     outroDetails: [
       "Ejemplo 1: Suavizar un botón al poner el ratón encima.",
@@ -591,7 +573,7 @@ const levelsInfo = [
           <li>opacity</li>
         </ul>
         <div class="controls-panel">
-          <button id="btn-transition" class="btn btn-secondary">Añadir transition: 0.5s;</button>
+          <button id="btn-transition" class="btn btn-secondary">Añadir transition: 0.5s</button>
         </div>
       </div>
       <div class="interactive-area animate-slide-up" style="animation-delay: 0.1s;">
@@ -612,10 +594,16 @@ const levelsInfo = [
       let tadded = false;
 
       btn.addEventListener('click', () => {
-        box.style.transition = 'all 0.5s ease';
-        btn.classList.replace('btn-secondary', 'btn-primary');
-        btn.innerText = "¡Transición Aplicada!";
-        tadded = true;
+        tadded = !tadded;
+        if (tadded){ 
+          box.style.transition = 'all 0.5s ease';
+          btn.classList.replace('btn-secondary', 'btn-primary');
+          btn.innerText = "¡Transición Aplicada!";
+        } else {
+          box.style.transition = 'all 0.0s ease';
+          btn.classList.replace('btn-primary', 'btn-secondary');
+          btn.innerText = "Añadir transition: 0.5s";
+        }
       });
 
       box.addEventListener('mouseenter', () => {
@@ -667,8 +655,14 @@ const levelsInfo = [
         if (rot !== 0 && scl !== 1) successCb();
       };
 
-      bRot.addEventListener('click', () => { rot = 45; update(); });
-      bScl.addEventListener('click', () => { scl = 1.5; update(); });
+      bRot.addEventListener('click', () => { rot += 45; update(); });
+      bScl.addEventListener('click', () => { 
+        if (scl > 3.3){
+          alert('¡No se puede agrandar más el bloque!');
+        } else {
+          scl *= 1.5; update(); 
+        }
+      });
       bRst.addEventListener('click', () => { rot = 0; scl = 1; update(); });
     }
   },
@@ -698,23 +692,92 @@ const levelsInfo = [
   animation: bounce 1s infinite;
 }</code></pre>
         <div class="controls-panel">
-          <button id="btn-anim" class="btn btn-secondary">1. Enlazar la animación</button>
+          <label for="time-slider"><strong>Velocidad:</strong> <span id="time-display">0</span></label>
+          <input type="range" id="time-slider" min="0" max="6" value="0" style="margin-bottom: 5px;">
+          
+          <label for="x0-slider"><strong>X inicial (px):</strong> <span id="x0-display">0</span></label>
+          <input type="range" id="x0-slider" min="-100" max="100" value="0" style="margin-bottom: 5px;">
+          
+          <label for="xf-slider"><strong>X final (px):</strong> <span id="xf-display">0</span>px</label>
+          <input type="range" id="xf-slider" min="-100" max="100" value="100" style="margin-bottom: 5px;">
+          
+          <label for="y0-slider"><strong>Y inicial (px):</strong> <span id="y0-display">100</span>px</label>
+          <input type="range" id="y0-slider" min="-100" max="100" value="0">
+
+          <label for="yf-slider"><strong>Y final (px):</strong> <span id="yf-display">100</span>px</label>
+          <input type="range" id="yf-slider" min="-100" max="100" value="100">
         </div>
       </div>
-      <div class="interactive-area animate-slide-up" style="animation-delay: 0.1s; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 50px;">
-        <div id="anim-ball" class="animate-target" style="font-size: 4rem; cursor: default; line-height: 1; display: inline-block;">⚽</div>
+      <div class="interactive-area animate-slide-up" style="animation-delay: 0.1s; width: 100%; height: 200px; display: flex; align-items: center; justify-content: center;">
+        <div id="anim-ball-fut" class="animate-target"style="font-size: 4rem; cursor: default; line-height: 1;">⚽</div>
       </div>
     `,
     setup: (wrapper, successCb) => {
       const btn = wrapper.querySelector('#btn-anim');
-      const ball = wrapper.querySelector('#anim-ball');
+      const ball = wrapper.querySelector('#anim-ball-fut');
 
-      btn.addEventListener('click', () => {
-        ball.style.animation = 'customBounce 1s infinite ease-in-out';
-        btn.classList.replace('btn-secondary', 'btn-primary');
-        
-        setTimeout(successCb, 1000); // Dar tiempito a ver el rebote
-      });
+      const timeSlider = wrapper.querySelector('#time-slider');
+      const x0Slider = wrapper.querySelector('#x0-slider');
+      const xfSlider = wrapper.querySelector('#xf-slider');
+      const y0Slider = wrapper.querySelector('#y0-slider');
+      const yfSlider = wrapper.querySelector('#yf-slider');
+      
+      const timeDisplay = wrapper.querySelector('#time-display');
+      const x0Display = wrapper.querySelector('#x0-display');
+      const xfDisplay = wrapper.querySelector('#xf-display');
+      const y0Display = wrapper.querySelector('#y0-display');
+      const yfDisplay = wrapper.querySelector('#yf-display');
+
+      const updateAnimation = (e) => {
+        let vel = timeSlider.value;
+        const x0 = x0Slider.value;
+        const xf = xfSlider.value;
+        const y0 = y0Slider.value;
+        const yf = yfSlider.value;
+
+        timeDisplay.textContent = vel;
+        x0Display.textContent = x0;
+        xfDisplay.textContent = xf;
+        y0Display.textContent = y0;
+        yfDisplay.textContent = yf;
+
+        let style = document.getElementById('kf');
+
+        if (!style) {
+          style = document.createElement('style');
+          style.id = 'kf';
+          document.head.appendChild(style);
+        }
+
+        if (vel != 0){
+          vel = 3/vel;
+          successCb()
+        }
+
+        ball.style.animation = 'none';
+        ball.offsetHeight; // reflow
+        ball.style.animation = `costumebounce ${vel}s infinite ease-in-out`;
+
+        style.innerHTML = `
+        @keyframes costumebounce {
+          0%, 100% { transform: translate(${x0}px,${y0}px); }
+          50% { transform: translate(${xf}px,${yf}px); }
+        }
+        `;
+      }
+
+      timeSlider.addEventListener('input', updateAnimation);
+      x0Slider.addEventListener('input', updateAnimation);
+      xfSlider.addEventListener('input', updateAnimation);
+      y0Slider.addEventListener('input', updateAnimation);
+      yfSlider.addEventListener('input', updateAnimation);
+
+      //btn.addEventListener('click', () => {
+      //  ball.style.animation = 'customBounce 1s infinite ease-in-out';
+      //  btn.classList.replace('btn-secondary', 'btn-primary');
+      //  
+      //  setTimeout(successCb, 1000); // Dar tiempito a ver el rebote
+      //});
     }
   },
 

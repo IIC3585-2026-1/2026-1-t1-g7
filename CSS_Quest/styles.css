@@ -459,6 +459,8 @@ code {
 .box-demo:nth-child(2) { background: var(--secondary); }
 .box-demo:nth-child(3) { background: var(--warning); }
 
+
+
 /* Nivel 4: Grid */
 .grid-demo-container {
   display: grid;
@@ -470,6 +472,31 @@ code {
   transition: all 0.5s;
 }
 .theme-dark .grid-demo-container { background: rgba(255,255,255,0.05); }
+
+/* Nivel 5: Media Query */
+
+@media (max-width: 800px) {
+  #mq-device {
+    flex-direction: column;
+  }
+}
+
+/* Nivel 6: Container Query */
+
+#cq-parent {
+  container-type: inline-size;
+}
+
+@container (max-width: 300px) {
+  #cq-child {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  #cq-sub {
+    display: none;
+  }
+}
 
 /* Nivel 7: Transiciones */
 .transition-box {
