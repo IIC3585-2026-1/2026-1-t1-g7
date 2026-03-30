@@ -93,48 +93,72 @@ const levelsInfo = [
     id: 2,
     title: "Funciones Clamp y Calc",
     concept: "Responsive Math",
-    intro: "¿Qué es clamp()?",
-    introDetails: "La función clamp(min, val, max) toma tres parámetros. Es ideal para fuentes responsivas porque evita que el texto sea muy pequeño en móviles o gigantesco en monitores.",
-    challenge: "Mueve el slider para cambiar el ancho simulado de la pantalla (vw) y observa cómo la caja usa clamp() para limitar su tamaño mínimo y máximo.",
-    outro: "¡Clamp es poderoso para diseños fluidos!",
+    intro: "¿Qué hacen clamp() y calc()?",
+    introDetails: "clamp(min, ideal, max) limita un valor dentro de un rango. calc() permite combinar unidades y operaciones matem?ticas como porcentajes y p?xeles. Juntas son muy ?tiles para dise?o responsivo.",
+    challenge: "Mueve ambos sliders. La tarjeta usa clamp() para no romper su tama?o y el bloque interno usa calc() para restar un espacio fijo al ancho disponible.",
+    outro: "?Ya viste c?mo combinar clamp() y calc()!",
     outroDetails: [
       "Ejemplo 1: width: clamp(200px, 50vw, 800px);",
-      "Ejemplo 2: font-size: clamp(1rem, 2vw, 3rem);"
+      "Ejemplo 2: width: calc(100% - 2rem);"
     ],
-    outroTip: "clamp() también reduce la necesidad de escribir tantos media queries.",
+    outroTip: "Usa clamp() para poner l?mites y calc() para mezclar unidades sin hardcodear medidas intermedias.",
     template: `
       <div class="theory-area animate-slide-up">
         <span class="concept-badge">Funciones</span>
-        <h2 class="level-title">clamp()</h2>
-        <p><strong>Regla aplicada en la caja lila:</strong></p>
-        <pre><code>width: clamp(25vw, <span id="vw-display">25</span>vw, 69vw);</code></pre>
+        <h2 class="level-title">clamp() + calc()</h2>
+        <p><strong>Reglas activas en el ejemplo:</strong></p>
+        <pre><code>width: clamp(220px, <span id="vw-display">42</span>vw, 520px);
+width: calc(100% - <span id="gap-display">32</span>px);</code></pre>
         <div class="controls-panel">
-          <label for="vw-slider">Simular Viewport Width (vw): <span id="vw-val">25</span>vw</label>
-          <input type="range" id="vw-slider" min="25" max="69" value="25">
+          <label for="vw-slider">Ancho ideal de la tarjeta: <span id="vw-val">42</span>vw</label>
+          <input type="range" id="vw-slider" min="20" max="80" value="42">
+          <label for="gap-slider">Espacio fijo restado con calc(): <span id="gap-val">32</span>px</label>
+          <input type="range" id="gap-slider" min="0" max="120" value="32">
         </div>
       </div>
       <div class="interactive-area animate-slide-up" style="animation-delay: 0.1s;">
-        <div id="clamp-box" style="background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 8px; width: 25%; min-width: 25%; max-width: 69%; transition: width 0.1s;">
-          ¡La caja crece!
+        <div id="clamp-box" style="background: var(--primary); color: white; padding: 20px; text-align: center; border-radius: 8px; width: clamp(220px, 42vw, 520px); transition: width 0.1s;">
+          <strong>Tarjeta principal</strong>
+          <div id="calc-box" style="margin: 16px auto 0; padding: 12px; border-radius: 6px; background: rgba(255,255,255,0.2); width: calc(100% - 32px); transition: width 0.1s;">
+            Este bloque usa <code>calc(100% - 32px)</code>
+          </div>
         </div>
       </div>
     `,
     setup: (wrapper, successCb) => {
       const slider = wrapper.querySelector('#vw-slider');
+      const gapSlider = wrapper.querySelector('#gap-slider');
       const docVal = wrapper.querySelector('#vw-val');
       const vwDisplay = wrapper.querySelector('#vw-display');
+      const gapVal = wrapper.querySelector('#gap-val');
+      const gapDisplay = wrapper.querySelector('#gap-display');
       const box = wrapper.querySelector('#clamp-box');
-      
-      let movedToEdge = false;
+      const calcBox = wrapper.querySelector('#calc-box');
+
+      let touchedClamp = false;
+      let touchedCalc = false;
+
+      const checkSuccess = () => {
+        if (touchedClamp && touchedCalc) successCb();
+      };
+
       slider.addEventListener('input', (e) => {
         const val = e.target.value;
         docVal.textContent = val;
         vwDisplay.textContent = val;
-        // Simular vw aplicando un width de porcentaje pero manteniendo limites min max 
-        box.style.width = val + '%'; 
-        
-        if (val <= 25 || val >= 69) movedToEdge = true;
-        if (movedToEdge) successCb();
+        box.style.width = `clamp(220px, ${val}vw, 520px)`;
+        touchedClamp = true;
+        checkSuccess();
+      });
+
+      gapSlider.addEventListener('input', (e) => {
+        const val = e.target.value;
+        gapVal.textContent = val;
+        gapDisplay.textContent = val;
+        calcBox.style.width = `calc(100% - ${val}px)`;
+        calcBox.innerHTML = `Este bloque usa <code>calc(100% - ${val}px)</code>`;
+        touchedCalc = true;
+        checkSuccess();
       });
     }
   },
